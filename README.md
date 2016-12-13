@@ -22,6 +22,7 @@ Asegurarse que su Magento use las siguientes extensiones
 - \app\design\frontend\default\default\template\customer\address\edit.phtml
 - \app\design\frontend\default\default\template\persistent\checkout\onepage\billing.phtml
 - \app\design\frontend\default\default\template\shipping\tracking\popup.phtml
+- \app\design\frontend\default\default\template\checkout\onepage\shipping_method/available.phtml
 
 ### Configuración
 
