@@ -198,6 +198,8 @@ class Ids_Andreani_Model_Carrier_Andreani extends Mage_Shipping_Model_Carrier_Ab
 
         $datos["contrato"]      = Mage::getStoreConfig('carriers/andreaniestandar/contrato',Mage::app()->getStore());
 
+        Mage::log("testmode: " . (Mage::getStoreConfig('carriers/andreaniconfig/testmode',Mage::app()->getStore()) == 1 ? "1":"0"));
+
         if (Mage::getStoreConfig('carriers/andreaniconfig/testmode',Mage::app()->getStore()) == 1) {
             $datos["urlCotizar"]        = Mage::helper('andreani')->getWSMethodUrl(Ids_Andreani_Helper_Data::COTIZACION,Ids_Andreani_Helper_Data::ENVMODTEST);
             $datos["urlSucursal"]       = Mage::helper('andreani')->getWSMethodUrl(Ids_Andreani_Helper_Data::SUCURSALES,Ids_Andreani_Helper_Data::ENVMODTEST);
@@ -216,17 +218,28 @@ class Ids_Andreani_Model_Carrier_Andreani extends Mage_Shipping_Model_Carrier_Ab
         if ($datos["precio"] == 0) {
             return $texto  = Mage::helper('andreani')->__("Error en la conexión con Andreani. Por favor chequee los datos ingresados en la información de envio y vuelva a intentar.");
         } else {
-            $texto  = Mage::getStoreConfig('carriers/andreaniestandar/description',Mage::app()->getStore());
+            $texto  = Mage::getStoreConfig('carriers/andreaniestandar/description', Mage::app()->getStore());
         }
 
         $rate->setMethodTitle($texto);
 
-        if($request->getFreeShipping() == true || $request->getPackageQty() == $this->getFreeBoxes()) {
+        Mage::log("getFreeShipping: " . ($request->getFreeShipping() ? "1":"0"));
+        Mage::log("getPackageQty: " . $request->getPackageQty());
+        Mage::log("getFreeBoxes: " . $this->getFreeBoxes());
+        Mage::log("datos[precio]: " . $datos["precio"]);
+
+        $can_be_free = Mage::getStoreConfig('carriers/andreaniconfig/canbefree', Mage::app()->getStore()) == 1;
+        if($can_be_free && ($request->getFreeShipping() == true || $request->getPackageQty() == $this->getFreeBoxes())) {
+            Mage::log("envio gratis?");
             $shippingPrice = '0.00';
             $rate->setMethodTitle(Mage::helper('andreani')->__('Envío gratis.'));
         } else {
             $shippingPrice = $this->getFinalPriceWithHandlingFee($datos["precio"]);
         }
+
+        Mage::log("shippingPrice: " . $shippingPrice);
+        Mage::log("carriers/andreaniestandar/regla: " . Mage::getStoreConfig('carriers/andreaniestandar/regla'));
+        Mage::log("carriers/andreaniconfig/canbefree: " . Mage::getStoreConfig('carriers/andreaniconfig/canbefree', Mage::app()->getStore()));
 
         $shippingPrice = $shippingPrice + ($shippingPrice * Mage::getStoreConfig('carriers/andreaniestandar/regla') / 100);
 
@@ -276,7 +289,8 @@ class Ids_Andreani_Model_Carrier_Andreani extends Mage_Shipping_Model_Carrier_Ab
 
         $rate->setMethodTitle($texto);
 
-        if($request->getFreeShipping() == true || $request->getPackageQty() == $this->getFreeBoxes()) {
+        $can_be_free = Mage::getStoreConfig('carriers/andreaniconfig/canbefree', Mage::app()->getStore()) == 1;
+        if($can_be_free && ($request->getFreeShipping() == true || $request->getPackageQty() == $this->getFreeBoxes())) {
             $shippingPrice = '0.00';
             // cambiamos el titulo para indicar que el envio es gratis
             $rate->setMethodTitle(Mage::helper('andreani')->__('Envío gratis.'));
@@ -351,7 +365,8 @@ class Ids_Andreani_Model_Carrier_Andreani extends Mage_Shipping_Model_Carrier_Ab
 
         $rate->setMethodTitle($texto);
 
-        if($request->getFreeShipping() == true || $request->getPackageQty() == $this->getFreeBoxes()) {
+        $can_be_free = Mage::getStoreConfig('carriers/andreaniconfig/canbefree', Mage::app()->getStore()) == 1;
+        if($can_be_free && ($request->getFreeShipping() == true || $request->getPackageQty() == $this->getFreeBoxes())) {
             $shippingPrice = '0.00';
             // cambiamos el titulo para indicar que el envio es gratis
             $direSucu  = " Sucursal: {$sucursales->Descripcion} ({$sucursales->Direccion}).";
@@ -416,7 +431,8 @@ class Ids_Andreani_Model_Carrier_Andreani extends Mage_Shipping_Model_Carrier_Ab
 
         $rate->setMethodTitle($methodTitle);
 
-        if($request->getFreeShipping() == true || $request->getPackageQty() == $this->getFreeBoxes()) {
+        $can_be_free = Mage::getStoreConfig('carriers/andreaniconfig/canbefree', Mage::app()->getStore()) == 1;
+        if($can_be_free && ($request->getFreeShipping() == true || $request->getPackageQty() == $this->getFreeBoxes())) {
             $shippingPrice = '0.00';
             // cambiamos el titulo para indicar que el envio es gratis
             $direSucu  = " Sucursal: {$methodTitle}.";
@@ -458,7 +474,7 @@ class Ids_Andreani_Model_Carrier_Andreani extends Mage_Shipping_Model_Carrier_Ab
     public function cotizarEnvio($params) {
         try {
 
-            if (Mage::getStoreConfig('carriers/andreaniconfig/testmode',Mage::app()->getStore()) == 1) {
+            if (Mage::getStoreConfig('carriers/andreaniconfig/testmode', Mage::app()->getStore()) == 1) {
                 $urlCotizar     = Mage::helper('andreani')->getWSMethodUrl(Ids_Andreani_Helper_Data::COTIZACION,Ids_Andreani_Helper_Data::ENVMODTEST);
                 $soapVersion    = Mage::helper('andreani')->getSoapVersion(Ids_Andreani_Helper_Data::COTIZACION,Ids_Andreani_Helper_Data::ENVMODTEST);
             } else {
@@ -476,6 +492,9 @@ class Ids_Andreani_Model_Carrier_Andreani extends Mage_Shipping_Model_Carrier_Ab
             $userCredentials = Mage::helper('andreani')->getUserCredentials();
 
             $wsse_header = new WsseAuthHeader($userCredentials['username'], $userCredentials['password']);
+
+            Mage::log("Andreani User " . $userCredentials['username'] . " Pass " . $userCredentials['password']);
+
             $client = new SoapClient($urlCotizar, $options);
             $client->__setSoapHeaders(array($wsse_header));
             //$sucursalRetiro     = array('sucursalRetiro' => "");
