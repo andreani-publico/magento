@@ -8,8 +8,9 @@
 $setup = $this;
 $setup->startSetup();
 
-$setup->run("ALTER TABLE sales_flat_shipment
-                    ADD COLUMN andreani_datos_guia mediumblob");
 
+$setup->run("
+    ALTER TABLE {$this->getTable('sales_flat_shipment')} ADD COLUMN andreani_datos_guia mediumblob;
+  ");
 $setup->endSetup();
 
