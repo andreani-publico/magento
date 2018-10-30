@@ -49,7 +49,8 @@ class Ids_Andreani_Helper_Data extends Mage_Core_Helper_Abstract
 				'exceptions'	=> 1,
 				'trace'			=> 1,
 				'style'			=> SOAP_DOCUMENT,
-				'encoding'		=> SOAP_LITERAL
+				'encoding'		=> SOAP_LITERAL,
+                                'use'   		=> SOAP_LITERAL
 			);
 
 			$optRequest["ObtenerTrazabilidad"] = array(
@@ -62,7 +63,7 @@ class Ids_Andreani_Helper_Data extends Mage_Core_Helper_Abstract
 			$client 	= new SoapClient($url, $options);
 			$request 	= $client->__soapCall("ObtenerTrazabilidad", $optRequest);
 
-			foreach( $request->Pieza->Envios->Envio->Eventos as $indice => $valor )
+			foreach( $request->Pieza->Envios->Envio->Eventos->Evento as $indice => $valor )
 			{
 				$eventos[$indice]["Fecha"] 		= $valor->Fecha;
 				$eventos[$indice]["Estado"] 	= $valor->Estado;

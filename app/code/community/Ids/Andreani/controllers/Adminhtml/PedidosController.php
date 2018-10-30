@@ -130,6 +130,7 @@ class Ids_Andreani_Adminhtml_PedidosController extends Mage_Adminhtml_Controller
 					'trace' 		=> 1,
 					'style' 		=> SOAP_DOCUMENT,
 					'encoding'		=> SOAP_LITERAL,
+                                        'use'   		=> SOAP_LITERAL
 				);
 				
 				$optRequest = array();
@@ -148,7 +149,7 @@ class Ids_Andreani_Adminhtml_PedidosController extends Mage_Adminhtml_Controller
 				$texto .= "Fecha de alta: " . $request->Pieza->Envios->Envio->FechaAlta . "\n";
 				
 
-				foreach( $request->Pieza->Envios->Envio->Eventos as $indice => $valor ) 
+				foreach( $request->Pieza->Envios->Envio->Eventos->Evento as $indice => $valor ) 
 				{
 					$texto .= "Eventos: " . "\n\n"; 
 					$texto .= "Fecha del evento: " . $valor->Fecha . "\n";
