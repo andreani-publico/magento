@@ -114,11 +114,11 @@ class Ids_Andreani_Adminhtml_PedidosController extends Mage_Adminhtml_Controller
 		
 		// 2. Conectarse a eAndreani
 		if (Mage::getStoreConfig('carriers/andreaniconfig/testmode',Mage::app()->getStore()) == 1) {
-			$url  = Mage::helper('andreani')->getWSMethodUrl(Ids_Andreani_Helper_Data::IMPRESIONCONSTANCIA,Ids_Andreani_Helper_Data::ENVMODTEST);
-			$soapVersion  		= Mage::helper('andreani')->getSoapVersion(Ids_Andreani_Helper_Data::IMPRESIONCONSTANCIA,Ids_Andreani_Helper_Data::ENVMODTEST);
+			$url  = Mage::helper('andreani')->getWSMethodUrl(Ids_Andreani_Helper_Data::TRAZABILIDAD,Ids_Andreani_Helper_Data::ENVMODTEST);
+			$soapVersion  		= Mage::helper('andreani')->getSoapVersion(Ids_Andreani_Helper_Data::TRAZABILIDAD,Ids_Andreani_Helper_Data::ENVMODTEST);
 		} else {
-			$url  = Mage::helper('andreani')->getWSMethodUrl(Ids_Andreani_Helper_Data::IMPRESIONCONSTANCIA,Ids_Andreani_Helper_Data::ENVMODPROD);
-			$soapVersion	  	= Mage::helper('andreani')->getSoapVersion(Ids_Andreani_Helper_Data::IMPRESIONCONSTANCIA,Ids_Andreani_Helper_Data::ENVMODPROD);
+			$url  = Mage::helper('andreani')->getWSMethodUrl(Ids_Andreani_Helper_Data::TRAZABILIDAD,Ids_Andreani_Helper_Data::ENVMODPROD);
+			$soapVersion	  	= Mage::helper('andreani')->getSoapVersion(Ids_Andreani_Helper_Data::TRAZABILIDAD,Ids_Andreani_Helper_Data::ENVMODPROD);
 		}
 	
 
