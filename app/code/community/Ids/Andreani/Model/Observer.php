@@ -290,10 +290,12 @@ class Ids_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
 			return false;
 
 		$dataGuia = array();
-
+                
 		if (strlen($datosAndreani['detalle_productos']) >= 90){
 			$datosAndreani['detalle_productos'] = substr($datosAndreani['detalle_productos'],0,80) . "...";
 		}
+                
+                Mage::log($datosAndreani,null,'andreani.log',true);
 		try {
 			$phpresponse = $client->GenerarEnviosDeEntregaYRetiroConDatosDeImpresion(array(
 				'parametros' => array(
