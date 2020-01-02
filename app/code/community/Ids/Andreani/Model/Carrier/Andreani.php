@@ -387,9 +387,7 @@ class Ids_Andreani_Model_Carrier_Andreani extends Mage_Shipping_Model_Carrier_Ab
         //        $datos["CategoriaPeso"]         = $this->envio->CategoriaPeso;
 
         // Buscamos la sucursal mas cercana del cliente segun el CP ingresado
-        $dataSucursalAndreani = array();
-
-        $dataSucursalAndreani['cpDestino'] = Mage::getSingleton('core/session')->getAndreaniSucursal()['cpDestino'];
+        $dataSucursalAndreani = Mage::getSingleton('core/session')->getAndreaniSucursal();
         $datos['cpDestino'] = Mage::getSingleton('core/session')->getAndreaniSucursal()['cpDestino'];
         $sucursales             = $this->consultarSucursales($dataSucursalAndreani,"sucursal");
 
@@ -550,6 +548,25 @@ class Ids_Andreani_Model_Carrier_Andreani extends Mage_Shipping_Model_Carrier_Ab
             $client         = new SoapClient($urlSucursales, $options);
             $client->__setSoapHeaders(array($wsse_header));
 
+            if (isset($params['SucursalRetiro']) || isset($params['sucursalRetiro'])) {
+                $phpresponse = $client->ConsultarSucursales(array(
+                    'consulta' => array(
+                        'CodigoPostal' => NULL,
+                        'Localidad' => NULL,
+                        'Provincia' => NULL
+                )));
+                $response = $phpresponse->ConsultarSucursalesResult->ResultadoConsultarSucursales;
+                foreach ($response AS $key => $sucursal) {
+                    if ($sucursal->Sucursal == $params['sucursalRetiro'] || $sucursal->Sucursal == $params['SucursalRetiro']) {
+                        $sucursales = $sucursal;
+                    }
+                }
+                Mage::log("Sucursal: " . print_r($sucursales, true));
+                Mage::getSingleton('core/session')->setSucursales($sucursales);
+
+                return $sucursales;
+            }
+            
             $phpresponse = $client->ConsultarSucursales(array(
                 'consulta' => array(
                     'CodigoPostal'  =>  $params["cpDestino"],
