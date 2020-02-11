@@ -388,7 +388,7 @@ class Ids_Andreani_Model_Carrier_Andreani extends Mage_Shipping_Model_Carrier_Ab
 
         // Buscamos la sucursal mas cercana del cliente segun el CP ingresado
         $dataSucursalAndreani = Mage::getSingleton('core/session')->getAndreaniSucursal();
-        $datos['cpDestino'] = Mage::getSingleton('core/session')->getAndreaniSucursal()['cpDestino'];
+        $dataSucursalAndreani['cpDestino'] = $datos['cpDestino'];
         $sucursales             = $this->consultarSucursales($dataSucursalAndreani,"sucursal");
 
         if($sucursales=="nosucursal"){
