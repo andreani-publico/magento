@@ -5,6 +5,13 @@
   - php GD (2.0.28 o superior) 
   - (Recomendado) Librería zlib
 
+
+### Otras versiones de Magento
+
+  - Magento 2.1:  https://github.com/andreani-publico/modulo-magento2
+  - Magento 2.2:  https://github.com/andreani-publico/magento-2.2
+
+
 ### Instalación
 
 Borrar el caché que se encuentra en el directorio var/cache y todas las cookies en el dominio de la tienda. Deshabilitar compilación para Magento 1.4+. Este paso elimina muchos potenciales problemas.
