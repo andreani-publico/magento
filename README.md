@@ -10,6 +10,7 @@
 
   - Magento 2.1:  https://github.com/andreani-publico/modulo-magento2
   - Magento 2.2:  https://github.com/andreani-publico/magento-2.2
+  - Magento 2.3:  https://github.com/andreani-publico/magento-2.3
 
 
 ### Instalación
