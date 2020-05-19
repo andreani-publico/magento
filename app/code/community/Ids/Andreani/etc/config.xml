@@ -318,6 +318,7 @@
 				<pesomax>100000</pesomax>
 				<metodo>basico</metodo>
 				<ws_cache>0</ws_cache>
+				<canbefree>0</canbefree>
 			</andreaniconfig>
 			<andreaniconfigwstest>
 				<cotizacion>https://cotizador.andreani.com/ws?wsdl</cotizacion>
